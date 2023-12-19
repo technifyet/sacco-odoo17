@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="smif_excel_payment_export_form" model="ir.ui.view">
+			<field name="name">smif.export_excel.form</field>
+			<field name="model">smif.excel_payment_export</field>
+			<field name="arch" type="xml">
+			<form string="Export Payments">
+				<sheet>
+				<group>
+
+					<group>
+						<field name="pay_zone_id"/>
+						<field name="company_id"/>
+						<field name="department_id"/>
+					</group>
+
+					<group>
+						<field name="title" />
+						<field name="exported_date" />
+						 <button name="generate_payments" string="Generate" type="object" class="btn btn-primary active"/>
+						<button name="export_payment" string="Export" type="object" class="btn btn-primary active"/>
+					</group>
+				</group>
+					<group>
+						<field name="item_orders"/>
+					</group>
+
+				<group>
+					 <field string="" name="data_lines" mode="tree" readonly="True"  >
+                                    <tree  edit="false" create="false" delete="false" >
+										<field name="sequence_number" readonly="True"/>
+
+										<field name="member_id" readonly="True"/>
+										<field name="member_name" readonly="True"/>
+										<field name="pay_zone" readonly="True"/>
+										<field name="amount" readonly="True"/>
+										<field name="payable_ids" readonly="True" widget="many2many_tags"/>
+                                    </tree>
+					 </field>
+				</group>
+				</sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+			</form>
+			</field>
+		</record>
+
+
+		<record id="smif_excel_export_view_tree" model="ir.ui.view">
+            <field name="name">Payment Export</field>
+            <field name="model">smif.excel_payment_export</field>
+            <field name="arch" type="xml">
+                <tree string="Export">
+					<field name="title" />
+                    <field name="exported_date"/>
+                    <field name="pay_zone_id"/>
+					  <field name="company_id" />
+					<field name="department_id" />
+                </tree>
+            </field>
+        </record>
+
+
+		<record id="smif_open_view_excel_payment_export_form" model="ir.actions.act_window">
+            <field name="name">Export Payments</field>
+
+            <field name="res_model">smif.excel_payment_export</field>
+            <field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+
+			 <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Start Data Export
+                </p>
+                <p>
+                    No Export Data found!
+                </p>
+            </field>
+        </record>
+
+
+
+	</data>
+</odoo>

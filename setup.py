@@ -9,7 +9,7 @@ exec(open(join(dirname(__file__), 'odoo', 'release.py'), 'rb').read())  # Load r
 lib_name = 'odoo'
 
 setup(
-    name='odoo',
+    name='saccoo',
     version=version,
     description=description,
     long_description=long_desc,

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="smif_withdrawal_tran_view_form" model="ir.ui.view">
+            <field name="name">smif.transaction.form</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <form string="Withdrawal" create="false" delete="false">
+
+                    <sheet>
+                        <field name="person_photo" widget='image' class="oe_avatar" required='True' options='{"zoom": true, "preview_image": ""}'/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="fullName" readonly="True"/>
+                            </h1>
+                            <h2>
+                                <field name="member_id_number" readonly="True"/>
+                            </h2>
+                             <field name="gender" readonly="True"/>
+
+                        </div>
+                        <div string="Member Accounts">
+                            <field name="member_account_ids" mode="tree" readonly="False">
+                                    <tree string="Member Account" editable="top" create="false" delete="false">
+                                        <field name="account_type" readonly="True"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="tmp_transaction_amount"  style="font-weight:bold; color:red;"  widget="monetary" string="Withdrawal Amount" sum="Total Withdrawal"/>
+                                        <field name="tmp_transaction_date"/>
+                                        <field name="account_number" readonly="True"/>
+                                        <field name="current_balance" readonly="True" string="Balance" sum="Total Balance"/>
+                                    </tree>
+                                </field>
+                        </div>
+
+                        <group string="Withdrawal Detail">
+                            <group>
+
+                             <field name="tmp_journal_id" required='True' widget="selection" domain="[('type', 'in', ('bank', 'cash'))]" />
+                                </group>
+                            <group>
+                            <field name="tmp_ref_number" />
+                            <field name="tmp_check_number"/>
+                        </group>
+                            <field placeholder="Transaction Note Here" name="tmp_transaction_note"/>
+                        </group>
+
+
+                     <group string ="Member Details">
+                            <group>
+                            <field name="address_id" readonly="True"/>
+                            <field name="mobile_phone" readonly="True"/>
+                                </group>
+                            <group>
+                            <field name="work_phone" readonly="True"/>
+                            <field name="email_address" readonly="True"/>
+                                </group>
+                        </group>
+                        <notebook>
+
+                            <page string="Signature">
+                                 <field name="signature" widget='image'  readonly="True" class="oe_left oe_signature" options="{'zoom': true,}"/>
+                            </page>
+
+                            <page string="Note" invisible="additional_note == False">
+                                <group>
+                                    <field name="additional_note"  readonly="True"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+
+
+                    </sheet>
+                    <header>
+                    </header>
+                </form>
+
+            </field>
+
+        </record>
+
+
+
+        <record id="view_member_tran_withdrawal_filter" model="ir.ui.view">
+            <field name="name">smif.member_tran.search</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <search string="Member">
+                    <field name="fullName" string="Member" filter_domain="['|','|','|','|','|', ('national_id', 'ilike', self), ('work_phone', 'ilike', self), ('member_id_number', 'ilike', self),  ('mobile_phone', 'ilike', self), ('email_address', 'ilike', self), ('fullName', 'ilike', self)]"/>
+                </search>
+            </field>
+        </record>
+
+       <record id="view_member_tran_withdrawal_tree" model="ir.ui.view">
+            <field name="name">smif.member_tran.tree</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <tree string="Members">
+                    <field name="member_id_number"/>
+                    <field name="fullName"/> <!--<field name="title,name"/>-->
+                    <field name="gender"/>
+                    <field name="mobile_phone"/>
+                    <field name="email_address"/>
+                </tree>
+            </field>
+        </record>
+
+         <record id="smif_open_view_withdrawal_tran" model="ir.actions.act_window">
+            <field name="name">Withdrawal Transaction</field>
+            <field name="res_model">smif.member</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+             <field name="context" >{'form_view_ref':'smif.smif_withdrawal_tran_view_form','default_tmp_transaction_type':'withdrawal' }</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Add Member's Withdrawal Transaction
+                </p><p>
+                Please search member by Name, Member ID, Phone number, or Email.
+            </p>
+            </field>
+        </record>
+    </data>
+</odoo>

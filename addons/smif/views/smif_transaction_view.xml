@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="smif_transaction_view_form" model="ir.ui.view">
+            <field name="name">smif.member_account.form</field>
+            <field name="model">smif.member_account</field>
+            <field name="arch" type="xml">
+                <form string="Transaction" create="false" edit="false">
+                    <sheet>
+                        <group>
+                        <group>
+                        <field name="member_ids" readonly="True" />
+                        <field name="type_name" readonly="True"/>
+                        <field name="account_number" readonly="True"/>
+                        </group>
+                            <group>
+                                <field string="Current Balance" name="current_balance"  style="font-weight:bold;" readonly="True"/>
+                            </group>
+                        </group>
+
+                                <field name="transaction_ids" mode="tree">
+                                    <tree delete="false" create="false">
+                                        <field name="transaction_date"/>
+                                        <field name="transaction_type"/>
+                                        <field name="transaction_amount"  options="{'currency_field': 'company_currency'}" style="{get_display_color}"/>
+                                        <field string="Balance" name="transaction_balance"  style="font-weight:bold;"/>
+                                        <field string="User" name="create_uid"  style="font-weight:bold;"/>
+
+                                    </tree>
+                                </field>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="smif_transaction_view_tree" model="ir.ui.view">
+            <field name="name">smif.member_account.tree</field>
+            <field name="model">smif.member_account</field>
+            <field name="arch" type="xml">
+                 <tree string="Members">
+                      <field name="member_ids"/>
+<!--                      <field name="account_ids"/>-->
+<!--                 <field name="transaction_category"/>-->
+<!--                     <field name="transaction_type"/>-->
+<!--                     <field name="transaction_date"/>-->
+<!--                     <field name="transaction_amount"/>-->
+                </tree>
+            </field>
+        </record>
+
+         <record id="smif_open_view_transaction" model="ir.actions.act_window">
+            <field name="name">Transaction</field>
+            <field name="res_model">smif.member_account</field>
+            <field name="view_mode">tree,form</field>
+             <field name="limit">10</field>
+<!--            <field name="search_view_id" ref="view_member_filter"/>-->
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Add Member's Transaction
+                </p><p>
+                Here you can record transactions done by member. So far there is no any transaction made.
+            </p>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

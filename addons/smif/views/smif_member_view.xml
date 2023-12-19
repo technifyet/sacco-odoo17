@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_member_filter" model="ir.ui.view">
+            <field name="name">smif.member.search</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <search string="Member">
+                    <field name="fullName" string="Member"
+                           filter_domain="['|','|','|','|','|', ('national_id', 'ilike', self), ('work_phone', 'ilike', self), ('member_id_number', 'ilike', self),  ('mobile_phone', 'ilike', self), ('email_address', 'ilike', self), ('fullName', 'ilike', self)]"/>
+                </search>
+            </field>
+        </record>
+        <record id="view_member_form" model="ir.ui.view">
+            <field name="name">smif.member.form</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <form string="Member" delete="false" duplicate="false">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="open_member_deposit"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-plus" string="Deposit">
+                                <!--                                <field name="shares_purchased_ids" widget="statinfo" string="Shares"/>-->
+                            </button>
+                            <button name="open_member_withdrawal"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-minus" string="Withdraw">
+                                <!--                                <field name="shares_purchased_ids" widget="statinfo" string="Shares"/>-->
+                            </button>
+                            <button name="open_member_transfer"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-exchange" string="Transfer"
+                                    groups="smif.group_smif_admin, smif.group_smif_manager">
+                                <!--                                <field name="shares_purchased_ids" widget="statinfo" string="Shares"/>-->
+                            </button>
+                            <button name="loan_view"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-pencil-square-o" string="Loan">
+                                <!--                                <field name="shares_purchased_ids" widget="statinfo" string="Shares"/>-->
+                            </button>
+                            <button name="member_deactivation"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-ban" string="Membership Deactivation"
+                                    groups="smif.group_smif_admin, smif.group_smif_manager">
+                                <!--                                <field name="shares_purchased_ids" widget="statinfo" string="Shares"/>-->
+                            </button>
+
+                        </div>
+                        <widget name="web_ribbon" title="In Active" bg_color="bg-danger"
+                                invisible="active == True"/>
+                        <field name="person_photo" widget='image' class="oe_avatar"
+                               options='{"zoom": true, "preview_image": ""}'/>
+
+                        <field name="active" invisible="1"/>
+                        <field name="is_member_id_auto_generated" invisible="1"/>
+                        <div class="oe_title">
+                            <field name="title_id" placeholder="Title" required="False"/>
+                            <h1>
+                                <field name="fullName" placeholder="Member Full Name" required="True"/>
+                            </h1>
+
+                            <h2>
+
+                                <!--                                <field name="member_id_number" placeholder="Member ID"  attrs="{'required': [('is_member_id_auto_generated', '=', False)], 'readonly': [('is_member_id_auto_generated', '=', True)]}"  />-->
+                                <field name="member_id_number" placeholder="Member ID"/>
+                            </h2>
+                        </div>
+                        <group string="Member Details">
+                            <group>
+                                <field name="user_id"/>
+                                <field name="gender"/>
+                                <field name="dob"/>
+                                <field name="marital"/>
+                                <field name="country_id"/>
+                                <field name="national_id"/>
+                            </group>
+                            <group>
+                                <field name="address_id"/>
+                                <field name="mobile_phone" widget="phone"/>
+                                <field name="work_phone"/>
+                                <field name="email_address"/>
+                            </group>
+                        </group>
+                        <group string="Employment">
+                            <group>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                                <field name="department_id" context="{'open_employees_kanban': 1}"/>
+                                <field name="job_title_id"/>
+                                <field name="pay_zone_id"/>
+                            </group>
+                            <group>
+                                <field name="education_level"/>
+                                <field name="occupation"/>
+
+                                <field name="is_committee_member"/>
+                                <field name="position_in_committee"
+                                        enabled="is_committee_member = False"/>
+                            </group>
+                        </group>
+                        <group string="Income">
+                            <group>
+                                <field name="currency_id" invisible="1"/>
+                                <field name="salary"/>
+
+                            </group>
+                            <group>
+                                <field name="additional_income"/>
+                            </group>
+
+                        </group>
+
+                        <group string="Registration Fee">
+                            <group>
+                                <field name="company_id" invisible="1"/>
+                                <field name="registration_fee"/>
+                                <field name="tmp_journal_id"/>
+                            </group>
+
+                            <group>
+                                <field name="tmp_ref_number"/>
+                                <field name="tmp_check_number"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Accounts">
+                                <field name="member_account_ids" mode="tree">
+                                    <tree delete="false">
+
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="account_number"/>
+                                        <field name="account_type" style="font-weight:bold; color:blue;"/>
+                                        <field name="account_created_date"/>
+                                        <field name="current_balance" sum="Total Balance" style="font-weight:bold;"/>
+                                        <button name="open_account_history" class="btn-primary" string="History"
+                                                type="object"/>
+
+                                    </tree>
+                                    <form string="Member Account">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="account_type"/>
+                                                    <field name="account_created_date"/>
+                                                </group>
+                                                <group>
+                                                    <field name="initial_deposit"/>
+                                                    <field name="account_number"/>
+                                                </group>
+                                            </group>
+
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Shares">
+                                <field name="shares_purchased_ids" mode="tree">
+                                    <tree delete="false">
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="share"/>
+                                        <field name="purchased_date"/>
+                                        <field name="purchased_quantity" sum="Total Share"/>
+                                        <field name="unit_price"/>
+                                        <field name="total_amount" sum="Total " widget="monetary"/>
+                                    </tree>
+                                    <form string="Member Share">
+                                        <sheet>
+                                            <group>
+                                                <group>
+                                                    <field name="currency_id" invisible="1"/>
+                                                    <field name="share"/>
+                                                    <field name="purchased_date"/>
+                                                </group>
+                                                <group>
+                                                    <field name="unit_price"/>
+                                                    <field name="purchased_quantity"/>
+                                                </group>
+                                            </group>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Family">
+                                <field name="family_ids" mode="tree">
+                                    <tree>
+                                        <field name="fullName"/>
+                                        <field name="gender"/>
+                                        <field name="mobile_phone"/>
+                                        <field name="work_phone"/>
+                                        <field name="relation_ship"/>
+                                        <field name="is_inheritor"/>
+                                    </tree>
+                                    <form string="Family">
+                                        <sheet>
+                                            <field name="person_photo" widget='image' class="oe_avatar"
+                                                   options='{"zoom": true, "preview_image":"image_128"}'/>
+                                            <div class="oe_title">
+                                                <h1>
+                                                    <field name="fullName" placeholder="Family Full Name"
+                                                           required="True"/>
+                                                </h1>
+                                                <h2>
+                                                    <field name="relation_ship" placeholder="Relation"/>
+                                                </h2>
+                                            </div>
+                                            <group>
+                                                <group>
+                                                    <field name="gender"/>
+                                                    <field name="dob"/>
+                                                    <field name="marital"/>
+                                                    <field name="mobile_phone" widget="phone"/>
+                                                    <field name="work_phone"/>
+                                                    <field name="is_inheritor"/>
+                                                </group>
+
+                                            </group>
+
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Signature">
+                                <field name="signature" widget='image' class="oe_left oe_signature"
+                                       options="{'zoom': true,}"/>
+                            </page>
+
+                            <page string="Additional Note">
+                                <group>
+                                    <field name="additional_note"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_member_tree" model="ir.ui.view">
+            <field name="name">smif.member.tree</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <tree string="Members">
+                    <field name="member_id_number"/>
+                    <field name="fullName"/> <!--<field name="title,name"/>-->
+                    <field name="gender"/>
+                    <field name="mobile_phone"/>
+                    <field name="email_address"/>
+
+
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_member_kanban" model="ir.ui.view">
+            <field name="name">smif.member.kanban</field>
+            <field name="model">smif.member</field>
+            <field name="priority">10</field>
+            <field name="arch" type="xml">
+                <kanban class="o_hr_employee_kanban">
+                    <field name="id"/>
+                    <field name="active"/>
+                    <field name="person_photo"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_hr_kanban_record">
+                                <t t-set="placeholder" t-value="'/base/static/img/avatar_grey.png'"/>
+                                <div class="o_kanban_image_fill_left d-none d-md-block"
+                                     t-attf-style="background-image:url('#{kanban_image('smif.member', 'person_photo', record.id.raw_value,  placeholder)}')">
+                                    <!--                                        <img class="o_kanban_image_inner_pic" t-if="record.child_ids.raw_value" t-att-alt="record.child_ids.value" t-att-src="kanban_image('smif.member', 'person_photo', record.child_ids.raw_value)"/>-->
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <div class="o_kanban_record_top">
+                                        <div class="o_kanban_record_headings">
+                                            <strong class="o_kanban_record_title">
+                                                <div class="float-right" t-if="record.active.raw_value == 'True'">
+                                                    <span class="fa fa-circle text-success" role="img"
+                                                          aria-label="Present" title="Present"
+                                                          name="presence_present"></span>
+                                                </div>
+                                                <div class="float-right" t-if="record.active.raw_value == 'False'">
+                                                    <span class="fa fa-circle text-danger" role="img"
+                                                          aria-label="Absent" title="Absent"
+                                                          name="presence_absent"></span>
+                                                </div>
+                                                <h4>
+                                                    <field name="fullName" placeholder="Member Name"/>
+                                                </h4>
+                                            </strong>
+                                            <span t-if="record.title_id.raw_value" class="o_kanban_record_subtitle">
+                                                <field name="title_id"/>
+                                            </span>
+                                            <span t-if="record.member_id_number.raw_value"
+                                                  class="o_kanban_record_subtitle">
+                                                <h6>
+                                                    ID:
+                                                    <field name="member_id_number"/>
+                                                </h6>
+                                            </span>
+
+                                        </div>
+                                    </div>
+                                    <ul>
+                                        <div t-if="record.email_address.raw_value">
+                                            <field name="email_address" widget="email"/>
+                                        </div>
+
+                                        <div t-if="record.work_phone.raw_value">Phone:
+                                            <field name="work_phone" widget="phone"/>
+                                        </div>
+                                        <div t-if="record.mobile_phone.raw_value">Mobile:
+                                            <field name="mobile_phone" widget="phone"/>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="smif_open_view_member" model="ir.actions.act_window">
+            <field name="name">Member</field>
+            <field name="res_model">smif.member</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{}</field>
+            <field name="search_view_id" ref="view_member_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Add New Member.
+                </p>
+                <p>
+                    With just a quick glance on the smif Member screen, you
+                    can easily find all the information you need for each member;
+                    profile, status, transactions, etc.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="smif_member_deactivation_form" model="ir.ui.view">
+            <field name="name">smif.member_deactivation.form</field>
+            <field name="model">smif.member</field>
+            <field name="arch" type="xml">
+                <form create="false" edit="true" delete="false">
+                    <sheet>
+                        <field name="active" invisible="1"/>
+                        <field name="person_photo" widget='image' class="oe_avatar" required='True'
+                               options='{"zoom": true, "preview_image": ""}'/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="fullName"  readonly="True"/>
+                            </h1>
+                            <h2>
+                                <field name="member_id_number" readonly="True"/>
+                            </h2>
+                        </div>
+                        <group>
+                            <field name="member_account_ids" string="Member Accounts" mode="tree"
+                                  readonly="True">
+                                <tree string="Member Account" editable="top" create="false" delete="false">
+                                    <field name="account_number" readonly="True"/>
+                                    <field name="account_type" readonly="True"/>
+                                    <!--                                        <field name="currency_id" invisible="1"/>-->
+                                    <field name="current_balance" readonly="True" string="Balance"
+                                           sum="Account Balance"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+                            <field name="shares_purchased_ids" mode="tree">
+                                <tree create="false" delete="false">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="share"/>
+                                    <field name="purchased_date"/>
+                                    <field name="purchased_quantity"/>
+                                    <field name="unit_price"/>
+                                    <field name="total_amount" sum="Total" widget="monetary"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group>
+
+                            <field name="member_loan_ids" mode="tree">
+                                <tree string="Member Loan" create="false" delete="false">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="loan_type_id" readonly="True"/>
+                                    <field name="loan_amount" widget="monetary" readonly="True"/>
+                                    <field string="Total Remaining" name="calculated_total_remaining_loan" sum="Total"/>
+                                    <field name="paid_installment_count" readonly="True"/>
+                                    <field name="calculated_total_paid_percentage" readonly="True"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <hr/>
+                        <group string="Deactivation">
+                            <group>
+                                <field name="total_account_balance" readonly="1"/>
+                                <field name="total_share" readonly="1"/>
+                                <field name="member_total_balance" readonly="1" style="font-weight:bold; color:black;"/>
+                                <br/>
+                                <field name="total_loan_remaining" readonly="1"/>
+                                <field name="total_loan_interest" readonly="1"/>
+                                <field name="total_loan_penalty" readonly="1"/>
+                                <field name="loan_payable_total" readonly="1" style="font-weight:bold; color:black;"/>
+                                <br/>
+                                <field string='Net Member Payable' name="saving_loan_diff_payable" readonly="1"
+                                       style="font-weight:bold; color:green;"
+                                       invisible="saving_loan_diff_payable &lt; 0"/>
+                                <field string='Net Remaining Payment' name="saving_loan_diff_payable" readonly="1"
+                                       style="font-weight:bold; color:red;"
+                                       invisible="saving_loan_diff_payable &gt; 0"/>
+                            </group>
+                            <group>
+                                <field name="deactivation_journal_id" required='True' widget="selection"
+                                       domain="[('type', 'in', ('bank', 'cash'))]"/>
+                                <field name="deactivation_ref_number"/>
+                                <field name="deactivation_check_number"/>
+                                <field name="deactivation_date" required='True'/>
+                                <field name="deactivation_remark"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Signature">
+                                <field name="signature" widget='image' readonly="True"
+                                       class="oe_left oe_signature" options="{'zoom': true,}"/>
+                            </page>
+
+                            <page string="Note" invisible="additional_note == False">
+                                <group>
+                                    <field name="additional_note"  readonly="True"/>
+                                </group>
+                            </page>
+
+                        </notebook>
+
+
+                    </sheet>
+                    <header>
+                    </header>
+                </form>
+
+            </field>
+
+        </record>
+
+
+        <record id="account_number_sqc" model="ir.sequence">
+            <field name="name">Members Account Number</field>
+            <field name="code">member_account_number_sqc</field>
+            <field name="prefix">1</field>
+            <field name="padding">7</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="member_id_sec" model="ir.sequence">
+            <field name="name">Members ID Number</field>
+            <field name="code">member_id_sec</field>
+            <field name="prefix">M</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

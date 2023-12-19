@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="smif_interest_form" model="ir.ui.view">
+            <field name="name">smif.interest.form</field>
+            <field name="model">smif.interest</field>
+            <field name="arch" type="xml">
+                <form string="Interest" edit="false">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+
+                            <button name="deposit_to_account"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-forward" string="Deposit" invisible="status == 'deposited'">
+                            </button>
+                             <button name="post_deposited"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-share-square-o" string="Post" invisible="status == 'posted'">
+                            </button>
+
+
+
+                        </div>
+                        <group>
+
+                            <group>
+                                <field name="generation_date" />
+                                <field name="generated_by"  readonly="True"  />
+                                <field name="status"/>
+
+                            </group>
+                            <group>
+                                <field name="from_date"/>
+                                <field name="upto_date"/>
+
+                                <button name="calculate_interest" string="Calculate" type="object"
+                                        class="btn btn-primary active"
+                                        invisible="status != 'open'"/>
+
+                            </group>
+                        </group>
+
+                        <group string="Accounts Interest">
+                            <field string="" name="account_interests" mode="tree" readonly="True">
+                                <tree edit="false" create="false" delete="false">
+                                <field name="member_name" readonly="True"
+                                           />
+                                    <field name="account_id" readonly="True"
+                                           decoration-bf="True"/>
+                                    <field string="Date" name="interest_date" readonly="True" />
+                                    <field name="interest_amount" readonly="True" sum="Total"/>
+                                    <field name="interest_rate" readonly="True" sum="Total"/>
+                                    <field name="status" readonly="True" decoration-success="status == 'posted'" decoration-warning="status == 'deposited'"
+                                           decoration-danger="status=='open'" decoration-bf="True"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="smif_open_interest" model="ir.ui.view">
+            <field name="name">Interest</field>
+            <field name="model">smif.interest</field>
+            <field name="arch" type="xml">
+                <tree string="Interest">
+                    <field name="generation_date"/>
+                    <field name="from_date"/>
+                    <field name="upto_date"/>
+
+                    <field name="status" readonly="True" decoration-success="status == 'deposited'"
+                           decoration-danger="status=='open'"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="smif_open_interest_form" model="ir.actions.act_window">
+            <field name="name">Account Interest</field>
+            <field name="res_model">smif.interest</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Start Interest Calculation
+                </p>
+                <p>
+                    It is Empty now
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

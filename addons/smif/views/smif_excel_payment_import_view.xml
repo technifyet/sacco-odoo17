@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<record id="smif_excel_payment_import_form" model="ir.ui.view">
+			<field name="name">smif.import_excel.form</field>
+			<field name="model">smif.excel_payment_import</field>
+
+			<field name="arch" type="xml">
+			<form string="Import Payments">
+
+				<header>
+
+                        <button name="load_and_validate_import" string="Load &amp; Validate" type="object" class="btn btn-primary active"
+                                invisible="status  in ['loaded','validated','imported','rejected']"/>
+                        <button name="import_payment" string="Import Payment" type="object" class="btn btn-primary active"
+                                invisible="status in  ['creating','rejected','imported']"/>
+						<button name="reject_import_payment" string="Reject" type="object" class="btn btn-primary active"
+                                invisible="status in ['creating','rejected','imported']"/>
+
+                        <field name="status" widget="statusbar"
+                               statusbar_visible="creating,loaded,validated,imported,rejected"/>
+                    </header>
+				<sheet>
+
+				<group>
+					<group>
+						<field name="file_content" widget="radio" />
+						<field name="imported_date"/>
+						<field name="payment_journal_id" required='False' default_focus="1" widget="selection" domain="[('type', 'in', ('bank', 'cash'))]" />
+					</group>
+					<group>
+						<field name="file" placeholder="Select File to Upload"/>
+
+					</group>
+				</group>
+
+				<group>
+					 <field string="" name="data_lines" mode="tree" readonly="True"  >
+                                    <tree decoration-success="ready_to_import == True"  decoration-danger="ready_to_import == False" edit="false" create="false" delete="false">
+										<field name="sequence_number" readonly="True"/>
+										<field name="ready_to_import" readonly="True" />
+										<field name="member_id" readonly="True"/>
+										<field name="member_name" readonly="True"/>
+										<field name="pay_zone" readonly="True"/>
+										<field name="amount" readonly="True"/>
+
+										<field name="payable_ids" readonly="True" widget="many2many_tags"/>
+										<field name="system_comment" readonly="True"  decoration-danger="system_comment != ''" />
+                                    </tree>
+					 </field>
+				</group>
+				</sheet>
+
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+
+
+			</form>
+			</field>
+		</record>
+
+
+		<record id="smif_excel_import_view_tree" model="ir.ui.view">
+            <field name="name">Payment Imports</field>
+            <field name="model">smif.excel_payment_import</field>
+            <field name="arch" type="xml">
+                <tree string="Imports">
+                    <field name="imported_date"/>
+                    <field name="file_content"/>
+					  <field name="status" />
+                </tree>
+            </field>
+        </record>
+
+
+		<record id="smif_open_view_excel_payment_import_form" model="ir.actions.act_window">
+            <field name="name">Import Payments</field>
+
+            <field name="res_model">smif.excel_payment_import</field>
+            <field name="view_mode">tree,form</field>
+			<field name="target">current</field>
+
+			 <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Start Data Import
+                </p>
+                <p>
+                    No Import Data found!
+                </p>
+            </field>
+        </record>
+
+
+
+	</data>
+</odoo>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.module.category" id="module_category_smif">
+        <field name="name">SMIF</field>
+        <field name="description">User Access Level for SacoSys</field>
+        <field name="sequence">45</field>
+    </record>
+    <record id="group_smif_member" model="res.groups">
+        <field name="name">Member</field>
+        <field name="category_id" ref="module_category_smif"/>
+    </record>
+
+    <record id="group_smif_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_smif"/>
+        <!--        <field name="implied_ids" eval="[(4, ref('group_smif_member'))]"/>-->
+    </record>
+
+    <record id="group_smif_admin" model="res.groups">
+        <field name="name">Admin</field>
+        <field name="category_id" ref="module_category_smif"/>
+        <!--        <field name="implied_ids" eval="[(4, ref('group_smif_manager'))]"/>-->
+    </record>
+    <record model="ir.rule" id="see_his_own_transaction">
+        <field name="name">See His Transaction Only</field>
+        <field name="model_id" ref="model_smif_member"/>
+        <!--        <field name="model_id" ref="model_smif_loan"/>-->
+        <field name="domain_force">[('user_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_smif_member'))]"/>
+    </record>
+
+    <record model="ir.rule" id="see_all_transaction">
+        <field name="name">See All Transaction</field>
+        <field name="model_id" ref="model_smif_member"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(4, ref('group_smif_manager'))]"/>
+    </record>
+
+    <record model="ir.rule" id="see_all_transaction">
+        <field name="name">See All Transaction</field>
+        <field name="model_id" ref="model_smif_member"/>
+        <field name="domain_force">[]</field>
+        <field name="groups" eval="[(4, ref('group_smif_admin'))]"/>
+    </record>
+
+
+    <record model="ir.rule" id="see_his_own_loan">
+        <field name="name">See His Loan Only</field>
+        <field name="model_id" ref="model_smif_loan_request"/>
+        <field name="domain_force">[('user_id','=',user.id),('state','=',('draft'))]</field>
+        <field name="groups" eval="[(4, ref('group_smif_member'))]"/>
+
+    </record>
+
+    <record model="ir.rule" id="see_manager_loan">
+        <field name="name">See Manager Loan</field>
+        <field name="model_id" ref="model_smif_loan_request"/>
+        <field name="domain_force">[('state', 'not in', ('rejected', 'paid', 'requested'))]</field>
+        <field name="groups" eval="[(4, ref('group_smif_manager'))]"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+    <record model="ir.rule" id="see_admin_loan">
+        <field name="name">See Admin Loan</field>
+        <field name="model_id" ref="model_smif_loan_request"/>
+        <field name="domain_force">[('state', 'in', ('draft', 'paid', 'requested', 'closed', 'rejected'))]</field>
+        <field name="groups" eval="[(4, ref('group_smif_admin'))]"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+</odoo>

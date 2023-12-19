@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    
+        <record id="smif_view_pay_zone_setup_form" model="ir.ui.view">
+            <field name="name">smif.pay_zone.form</field>
+            <field name="model">smif.pay_zone</field>
+            <field name="arch" type="xml">
+                <form string="Pay Zone">
+                    <sheet>
+                        <group>
+                            <group>
+                             <field name="pay_zone_code"  required="True"/>
+                                <field name="pay_zone"  required="True"/>
+
+                            </group>
+                        </group>
+
+                    </sheet>
+
+                </form>
+            </field>
+        </record>
+
+        <record id="smif_pay_zone_view_tree" model="ir.ui.view">
+             <field name="name">Pay Zones</field>
+            <field name="model">smif.pay_zone</field>
+
+
+            <field name="arch" type="xml">
+                <tree string="Pay Zones">
+                    <field name="pay_zone_code"/>
+                    <field name="pay_zone"/>
+                </tree>
+            </field>
+        </record>
+        <record id="smif_open_view_pay_zone_setup" model="ir.actions.act_window">
+            <field name="name">Pay Zone</field>
+            <field name="res_model">smif.pay_zone</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                 Create Pay zones
+                </p>
+                <p>
+                    No Pay Zone is created. Click Create Button to create one.
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

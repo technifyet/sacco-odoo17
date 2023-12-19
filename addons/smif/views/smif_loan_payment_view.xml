@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="smif_loan_paid_view_form" model="ir.ui.view">
+            <field name="name">smif.paid.form</field>
+            <field name="model">smif.loan_request</field>
+            <field name="arch" type="xml">
+                <form string="Loan Payment" create="false" edit="true"  delete="false">
+                    <sheet>
+
+                        <div class="oe_title">
+                            <field name="person_photo" widget='image' readonly='True' class="oe_avatar" options='{"zoom": true, "preview_image": ""}'/>
+                            <a type="open">
+                            <h1>
+                                 <field name="member_id"  readonly="True"/>
+                            </h1></a>
+                            <h2>
+                                <field name="member_id_number" readonly="True"/>
+                            </h2>
+                             <field name="gender" readonly="True"/>
+                            <field name="additional_note"  invisible="additional_note == False" readonly="True"/>
+                        </div>
+
+                        <group string="Loan Payment Detail">
+                            <group>
+
+                                <field name="loan_amount" readonly="True" style="font-weight:bold; color:green;" />
+
+                                <field name="payment_journal_id" required='True' default_focus="1" widget="selection" domain="[('type', 'in', ('bank', 'cash'))]" />
+                            </group>
+                            <group>
+                                <field name="paid_date" required="True"/>
+                                <field name="payment_ref_number" />
+                                <field name="payment_check_number"/>
+                        </group>
+                            <field placeholder="Note" name="payment_transaction_note"/>
+                        </group>
+                    </sheet>
+                    <header>
+                    </header>
+                </form>
+
+            </field>
+        </record>
+
+
+        <record id="smif_installment_payment_view_form" model="ir.ui.view">
+            <field name="name">smif.loan_installment.form</field>
+            <field name="model">smif.loan_installment</field>
+            <field name="arch" type="xml">
+                <form string="Installment Payment" create="true" edit="true" delete="false">
+                    <sheet>
+                         <group string="Installment Detail">
+                             <group>
+                                <field name="installment_number" readonly="True" />
+                                <field name="instalment_date" readonly="True" />
+                                 <field name="is_paid" invisible="True"/>
+                            </group>
+                               <group>
+                                <field name="principal" readonly="True" />
+                                <field name="interest_payment" readonly="True" />
+                                 <field name="saving_payment" readonly="True" />
+                                 <field name="total_installment_payment" readonly="True" />
+                            </group>
+                         </group>
+                        <group string="Payment Detail">
+                             <group invisible="is_paid == True">
+                                <field string="Loan Payment" name="tmp_loan_payment_amount" required="is_paid == False" style="font-weight:bold; color:green;" widget='monetary'/>
+                                <field string="Saving Deposit" name="tmp_saving_amount" style="font-weight:bold; color:green;" widget='monetary'/>
+                                <field string="Penalty Payment" name="tmp_penalty_amount" style="font-weight:bold; color:green;" widget='monetary'/>
+                                 <field string="Total Payment" name="calculated_total_payment" style="font-weight:bold; color:green;" widget='monetary'/>
+                            </group>
+
+<!--                            Show only if paid-->
+                            <group invisible="is_paid == False">
+                                <field string="Loan Payment" name="loan_paid_amount" style="font-weight:bold; color:green;" widget='monetary'/>
+                                <field string="Interest" name="interest_payment" style="font-weight:bold; color:green;" widget='monetary'/>
+                                <field string="Saving Deposit" name="saving_paid_amount" style="font-weight:bold; color:green;" widget='monetary'/>
+                                <field string="Penalty Payment" name="penalty_paid_amount" style="font-weight:bold; color:green;" widget='monetary'/>
+                                 <field string="Total Payment" name="calculated_total_paid_amount" style="font-weight:bold; color:green;" widget='monetary'/>
+                            </group>
+
+
+                            <group>
+                                <field name="payment_journal_id" required='True' default_focus="1" widget="selection" domain="[('type', 'in', ('bank', 'cash'))]" />
+                                <field name="paid_date" required="True"/>
+                                <field name="payment_ref_number" />
+                                <field name="payment_check_number"/>
+                            </group>
+                            <field placeholder="Note" name="payment_transaction_note"/>
+                        </group>
+                    </sheet>
+                    <header>
+                    </header>
+                </form>
+
+            </field>
+        </record>
+
+
+         <record id="smif_open_view_loan_payment_form" model="ir.actions.act_window">
+            <field name="name">Loan Payment</field>
+            <field name="res_model">smif.loan_request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+            <field name="context" >{'form_view_ref':'smif.smif_loan_paid_view_form',
+                'tmp_transaction_type':'payment'}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Member Loan Payment
+                </p><p>
+                Please search member by Name, Member ID, Phone number, or Email.
+            </p>
+            </field>
+        </record>
+    </data>
+</odoo>

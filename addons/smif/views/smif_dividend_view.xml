@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="smif_dividend_creation_form" model="ir.ui.view">
+            <field name="name">smif.dividends.form</field>
+            <field name="model">smif.dividends</field>
+            <field name="arch" type="xml">
+                <form string="Dividends" edit="false">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="select_all"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-check-square" string="Select All" invisible="status != 'generated'">
+                            </button>
+                            <button name="view_bulk_payment"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-forward" string="Make Payments For Selection" invisible="status != 'generated'">
+                            </button>
+                             <button name="handle_bulk_posting"
+                                    type="object"
+                                    class="oe_stat_button"
+                                    icon="fa-share-square-o" string="Post Paid" invisible="status != 'generated'">
+                            </button>
+
+                        </div>
+                        <group>
+
+                            <group>
+                                <field name="dividend_generation_date"/>
+                                <field name="from_date"/>
+                                <field name="upto_date"/>
+                            </group>
+
+                            <group>
+                                <field name="net_income"/>
+
+                                <field name="members_dividend_amount"/>
+                                <field name="company_dividend_amount"/>
+                                <field name="status" invisible="True"/>
+                                <button name="generate_members_dividend" string="Generate" type="object"
+                                        class="btn btn-primary active"
+                                        invisible="status != 'created'"/>
+                            </group>
+                        </group>
+
+
+
+                        <group string="Dividend for each members">
+                            <field string="" name="members_dividend" mode="tree" readonly="True">
+                                <tree edit="false" create="false" delete="false" colors= "blue:is_selected==True;">
+
+                                    <button name="select_row" class="btn-secondary"  invisible="is_selected == True"  string="x" type="object"/>
+                                    <button name="unselect_row" class="btn-primary" invisible="is_selected == False"   string="✓" type="object"/>
+
+                                    <field name="member_id" readonly="True"
+                                           decoration-bf="remaining_amount>0"/>
+                                    <field name="total_member_saving" readonly="True" decoration-info="True"
+                                           sum="Total:"/>
+                                    <field name="saving_dividend" readonly="True" decoration-bf="True"
+                                           sum=""/>
+                                    <field name="total_member_shares" readonly="True" decoration-info="True"
+                                           sum="Total Share:"/>
+                                    <field name="share_dividend" readonly="True" decoration-bf="True" sum=""/>
+                                    <field name="total_member_dividend" readonly="True" decoration-bf="True"
+                                           sum=""/>
+                                    <field name="remaining_amount" readonly="True" decoration-bf="True"
+                                           sum=""/>
+                                    <field name="status" readonly="True" decoration-success="status == 'posted'" decoration-warning="status == 'paid'"
+                                           decoration-danger="status=='payable'" decoration-bf="True"/>
+                                    <field name="is_selected" />
+                                    <button name="make_payment" class="btn-primary" string="Make Payment" type="object"
+                                            invisible="status == 'paid' | status == 'posted'"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </sheet>
+
+
+                </form>
+            </field>
+        </record>
+
+
+        <record id="smif_open_member_dividend" model="ir.ui.view">
+            <field name="name">Member Dividend</field>
+            <field name="model">smif.dividends</field>
+            <field name="arch" type="xml">
+                <tree string="Export">
+                    <field name="dividend_generation_date"/>
+                    <field name="from_date"/>
+                    <field name="upto_date"/>
+                    <field name="net_income"/>
+                    <field name="status" readonly="True" decoration-success="status == 'posted'" decoration-warning="status == 'paid'"
+                                           decoration-danger="status=='payable'" decoration-bf="True"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="smif_open_member_dividend_form" model="ir.actions.act_window">
+            <field name="name">Member Dividend</field>
+            <field name="res_model">smif.dividends</field>
+            <field name="view_mode">tree,form</field>
+            <field name="target">current</field>
+
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Start Dividend Creation
+                </p>
+                <p>
+                    It is Empty now
+                </p>
+            </field>
+        </record>
+
+
+        <record id="smif_dividend_settlement_view_form" model="ir.ui.view">
+            <field name="name">smif.dividend_settlement.form</field>
+            <field name="model">smif.member_dividend</field>
+            <field name="arch" type="xml">
+                <form string="Dividend Settlement" create="false" edit="true" delete="false">
+<!--                    Script to hide footer save button on the form-->
+                     <script>
+        $(document).ready(function(){
+<!--        $(".modal-header").hide();-->
+        $(".modal-footer").hide();
+        });
+    </script>
+                    <sheet>
+                        <group string="Dividend Detail"  invisible="is_bulk_settlement_mode == True">
+                            <group>
+                                <field name="member_id" readonly="True"/>
+                                <field name="status" readonly="True"/>
+                                <field name="remaining_amount" readonly="True" decoration-bf="True" sum=""/>
+                                <field name="is_bulk_settlement_mode"
+                                       invisible="True"/>
+                            </group>
+                            <group>
+                                <field name="saving_dividend" readonly="True" style="font-weight:bold;"/>
+                                <field name="share_dividend" readonly="True" style="font-weight:bold;"/>
+                                <field name="total_member_dividend" readonly="True"
+                                       style="font-weight:bold;"/>
+
+                            </group>
+                        </group>
+
+
+                        <group string="Current Settlement Detail" invisible="status == 'paid'">
+                            <group>
+                                <field name="tmp_payment_mode"/>
+                                <field name="tmp_payment_date"/>
+                                <field name="tmp_amount" invisible="is_bulk_settlement_mode == True" style="font-weight:bold; color:blue;"/>
+                            </group>
+                            <group>
+                                <field name="tmp_account_id" widget='selection'
+                                       required="tmp_payment_mode == 'account' &amp; is_bulk_settlement_mode == False" invisible="tmp_payment_mode != 'account' | is_bulk_settlement_mode == True"/>
+                                <field name="tmp_account_type_id" widget='selection'
+                                       required="tmp_payment_mode ==  'account' &amp; is_bulk_settlement_mode == True" invisible="tmp_payment_mode !=  'account' | is_bulk_settlement_mode ==  False"/>
+
+                                <field name="tmp_loan_type_id" widget='selection'
+                                       required="tmp_payment_mode ==  'loan' &amp; is_bulk_settlement_mode == True" invisible="tmp_payment_mode!='loan' | is_bulk_settlement_mode == False"/>
+
+                                <field name="tmp_mem_id" invisible="True"/>
+                                <field name="tmp_loan_id"
+                                       required="tmp_payment_mode == 'loan' &amp; is_bulk_settlement_mode == False" invisible="tmp_payment_mode != 'loan' | is_bulk_settlement_mode  == True" widget='selection'/>
+                                <field name="tmp_payment_journal_id" widget='selection'
+                                       required="tmp_payment_mode == 'cash'" invisible="tmp_payment_mode != 'cash'"/>
+                                <field name="tmp_payment_ref_number"
+                                       invisible="tmp_payment_mode != 'cash'"/>
+                                <field name="tmp_check_number"
+                                        invisible="tmp_payment_mode != 'cash'"/>
+                                <field name="tmp_share"
+                                                       required="tmp_payment_mode == 'share'"  invisible="tmp_payment_mode != 'share'" widget='selection'/>
+                                <field name="tmp_purchased_quantity"
+                                                       required="tmp_payment_mode == 'share'"  invisible="tmp_payment_mode !=  'share'"/>
+
+                                <field name="company_id" invisible="True"/>
+                                <button name="save_payment_settlement" class="btn-primary" string="Save" type="object"/>
+                            </group>
+                        </group>
+
+
+                        <group string="Settlements" invisible="is_bulk_settlement_mode == True" >
+                            <field string="" name="settlements_ids" mode="tree">
+                                <tree delete="false" edit="false" create="false">
+                                    <field name="payment_mode"/>
+                                    <field name="payment_date" style="font-weight:bold; color:blue;"/>
+                                    <field name="amount" sum="Total Balance" style="font-weight:bold;"/>
+                                </tree>
+                                <form string="Settlement" delete="false" edit="false" create="false">
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="payment_mode"/>
+                                                <field name="payment_date"/>
+                                                <field name="amount" style="font-weight:bold; color:blue;"/>
+                                            </group>
+                                            <group>
+                                                <field name="account_id"
+                                                       invisible="payment_mode != 'account'"/>
+                                                <field name="mem_id" invisible="True"/>
+                                                <field name="loan_id"
+                                                       invisible="payment_mode != 'loan'"/>
+                                                <field name="payment_journal_id"
+                                                        invisible="payment_mode != 'cash'"/>
+                                                <field name="payment_ref_number"
+                                                     invisible="payment_mode != 'cash'"/>
+                                                <field name="check_number"
+                                                        invisible="payment_mode != 'cash'"/>
+
+
+                                                <field name="company_id" invisible="True"/>
+                                            </group>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </group>
+                    </sheet>
+                    <header>
+                    </header>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

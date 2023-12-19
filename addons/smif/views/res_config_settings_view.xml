@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.smif</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="40"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <div class="app_settings_block" data-string="Smif Settings" string="Smif Settings" data-key="smif">
+
+                    <h2>Members</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_left_pane"/>
+                           <div class="o_setting_left_pane">
+                                <field name="auto_generate_member_id" class="font-weight-bold"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                               <label string="Auto Generate Member ID" for="auto_generate_member_id"/>
+                                <div class="text-muted">
+                                    Uncheck to provide member ID Manually like to use Employee ID, If checked it will auto generate member ID during registration time.
+                                </div>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label string="Registration Fee" for="registration_fee"/>
+                                <div class="text-muted">
+                                    Member Initial Registration Fee
+                                </div>
+
+                                <field name="registration_fee" class="font-weight-bold"/>
+                            </div>
+
+                            <br/>
+
+                            <div class="o_setting_right_pane">
+                                <label string="Maximum Share" for="maximum_share"/>
+                                <div class="text-muted">
+                                    Maximum Share percentage a member can buy.
+                                </div>
+
+                                   <div class="d-flex">
+                                    <field name="maximum_share" />
+                                    <h7> %</h7>
+                                </div>
+
+                            </div>
+                            <div class="o_setting_left_pane">
+                                 <field name="membership_share_required"/>
+                            </div>
+                                <div class="o_setting_right_pane">
+                                <label string="Members Must Purchase Share" for="membership_share_required"/>
+                                <div class="text-muted">
+                                    If checked, members are forced to purchase share during membership.
+                                </div>
+                                </div>
+                            <br/>
+                            <div class="o_setting_right_pane">
+                                <label string="Number of Collateral Member Can Be" for="max_collateral_member_can_be"/>
+                                <div class="text-muted">
+                                    Pleas enter maximum numbers of collateral a member can be for other members.
+                                </div>
+                                <field name="max_collateral_member_can_be"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+
+                                <label string="Member Dividend" for="member_dividend_percentage"/>
+                                <div class="text-muted">
+                                    Members dividend percentage
+                                </div>
+                                <div class="d-flex">
+                                    <field name="member_dividend_percentage" />
+                                    <h7> %</h7>
+                                </div>
+
+                                <label string="Retained Earning" for="retained_earning"/>
+                                <div class="text-muted">
+                                    Company dividend percentage
+                                </div>
+                                 <div class="d-flex">
+                                    <field name="retained_earning" />
+                                    <h7> %</h7>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="o_setting_right_pane">
+                                <label string="Calculate Dividend Using Members" for="calc_dividend_by"/>
+                                <div class="text-muted">
+                                    Pleas select dividend calculation method to be used.
+                                </div>
+                                <field name="calc_dividend_by" />
+                                <br/>
+
+                                <div class="content-group" invisible="calc_dividend_by != 'both'">
+                                        <div class="row mt16">
+                                            <label string="Saving:" class="col-lg-3 o_light_label" for="member_dividend_saving_percentage" />
+                                            <field name="member_dividend_saving_percentage" required="calc_dividend_by == 'both'" width="5" />
+                                            <h7> %</h7>
+                                        </div>
+                                        <div class="row">
+                                             <label string="Share:" for="member_dividend_share_percentage" class="col-lg-3 o_light_label"/>
+                                             <field name="member_dividend_share_percentage" required="calc_dividend_by == 'both'" />
+                                            <h7> %</h7>
+                                        </div>
+                                    </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Saving Settings</h2>
+                     <div class="row mt16 o_settings_container">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label string="Calculate Saving Interest Per" for="saving_interest_period"/><br/>
+                                <div class="text-muted">
+                                    Select saving interest calculation interval per day, month or year.</div>
+                                <div class="d-flex">
+                                     <field name="saving_interest_period" />
+                                </div>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label string="Minimum Deposit Duration" for="minimum_deposit_duration_for_int"/><br/>
+
+                                <div class="d-flex">
+                                     <field name="minimum_deposit_duration_for_int"  />
+                                    <h7 invisible="saving_interest_period == 'yearly'"><b> Days</b></h7>
+                                    <h7 invisible="saving_interest_period != 'yearly'"><b> Months</b></h7>
+                                </div>
+                                  <div class="text-muted">
+                                    Provide minimum duration of deposit to calculate interest for. Eg: 14 days means deposit will be calculated only for deposit before 14 days excluding others.
+                                </div>
+                            </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+
+                             <div class="o_setting_right_pane">
+                                <label string="Minimum Interest Rate" for="minimum_saving_interest"/><br/>
+                                <div class="text-muted">
+                                    Minimum saving interest rate applicable in the company for all saving types.
+                                </div>
+
+                                <div class="d-flex">
+                                     <field name="minimum_saving_interest" />
+                                    <h7> %</h7>
+                                </div>
+                            </div>
+
+                            <div class="o_setting_right_pane">
+                                <label string="Maximum Interest Rate" for="maximum_saving_interest"/><br/>
+                                <div class="text-muted">
+                                    Maximum saving interest rate applicable in the company for all saving types.
+                                </div>
+                                <div class="d-flex">
+                                     <field name="maximum_saving_interest"  />
+                                    <h7> %</h7>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Loan Settings</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label string="Minimum Interest" for="minimum_loan_interest"/>
+                                <div class="text-muted">
+                                    Minimum loan interest rate.
+                                </div>
+                                 <div class="d-flex">
+                                      <field name="minimum_loan_interest" class="font-weight-bold"/>
+                                    <h7> %</h7>
+                                </div>
+                                <br/>
+
+                                <label string="Maximum Interest" for="maximum_loan_interest"/>
+                                <div class="text-muted">
+                                    Maximum loan interest rate.
+                                </div>
+                                 <div class="d-flex">
+                                      <field name="maximum_loan_interest" />
+                                    <h6> %</h6>
+                                </div>
+                                <br/>
+                                <label string="Maximum Loan Allowed" for="maximum_loan_allowed"/>
+                                <div class="text-muted">
+                                    Maximum loan grant amount allowed for members.
+                                </div>
+                                <field name="maximum_loan_allowed" />
+                                <br/>
+                                <label string="Minimum Saving Months" for="minimum_saving_months"/>
+                                <div class="text-muted">
+                                    Number of minimum saving months to get loan.
+                                </div>
+                                <field name="minimum_saving_months" />
+                                <br/>
+
+                                 <label string="Maximum Payment Period" for="maximum_loan_payment_period"/>
+                                <div class="text-muted">
+                                    Maximum payment period for a loan to be completed in months.
+                                </div>
+                                <field name="maximum_loan_payment_period" />
+                                <br/>
+
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                 <label string="Calculate Service Charge Using" for="loan_service_charge_in"/>
+                                <br/><field name="loan_service_charge_in" />
+                                <br/>
+                                <label string="Service charge" for="loan_service_charge"/>
+                                <div class="text-muted">
+                                    Loan service charge
+                                </div>
+
+
+                                 <div class="d-flex">
+                                      <field name="loan_service_charge"/>
+
+                                </div>
+
+                                <label string="Calculate Loan Refinancing Using" for="loan_refinancing_in"/>
+                                <br/><field name="loan_refinancing_in" />
+
+                                <label string="Minimum loan payment for refinancing" for="minimum_loan_payment_for_refinance"/>
+                                <div class="text-muted">
+                                    Minimum loan payment percentage to get refinancing
+                                </div>
+
+                                <div class="d-flex">
+                                      <field name="minimum_loan_payment_for_refinance"/>
+
+                                </div>
+                                <br/>
+                                <label string="Loan Interest Calculation Method" for="loan_calculation_method"/>
+                                <br/><field name="loan_calculation_method" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>Accounting Settings</h2>
+                     <div class="row mt16 o_settings_container">
+                        <div class="col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label string="Registration Fee Account" for="reg_fee_account"/><br/>
+                                <div class="text-muted">
+                                    Please select Registration Fee default chart of account.
+                                </div>
+                                <field name="reg_fee_account" />
+                                <br/>
+                                <label string="Service Charge Account" for="service_charge_account"/><br/>
+                                <div class="text-muted">
+                                    Please select Service Charge default chart of account.
+                                </div>
+                                <field name="service_charge_account" />
+                                <br/>
+                                <label string="Penalty Account" for="penalty_account"/><br/>
+                                <div class="text-muted">
+                                    Please select Penalty default chart of account.
+                                </div>
+                                <field name="penalty_account" />
+                                <br/>
+
+                                 <label string="Dividend Account Payable" for="dvd_account_payable"/><br/>
+                                <div class="text-muted">
+                                   This is used for Account entry for total member dividend entry
+                                </div>
+                                <field name="dvd_account_payable" />
+                                <br/>
+
+                                </div>
+                        </div>
+
+                         <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label string="Saving Interest Account" for="saving_interest_account"/><br/>
+                                <div class="text-muted">
+                                    Please select Saving Interest default chart of account.
+                                </div>
+                                <field name="saving_interest_account" />
+                                <br/>
+                                <label string="Loan Interest Account" for="loan_interest_account"/><br/>
+                                <div class="text-muted">
+                                    Please select Loan Interest default chart of account.
+                                </div>
+                                <field name="loan_interest_account" />
+                                <br/>
+                                <label string="Insurance Account" for="insurance_account"/><br/>
+                                <div class="text-muted">
+                                    Please select Insurance default chart of account.
+                                </div>
+                                <field name="insurance_account" />
+                                <br/>
+
+
+                                <label string="Dividend Account Paid" for="dvd_account_paid"/><br/>
+                                <div class="text-muted">
+                                   This is used for Account entry for each dividend amount
+                                </div>
+                                <field name="dvd_account_paid" />
+                                <br/>
+
+                                <label string="Retained Earning Account" for="retained_earning_account"/><br/>
+                                <div class="text-muted">
+                                   This is used for Account entry for company dividend amount
+                                </div>
+                                <field name="retained_earning_account" />
+                                <br/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2>About</h2>
+                            <div class="row mt16 o_settings_container">
+                                <div class='col-12 col-lg-6 o_setting_box' id='appstore'>
+                                    <div class="d-flex">
+
+                                    </div>
+                                </div>
+<!--                                <widget name='res_config_edition'/>-->
+                            </div>
+
+                </div>
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="smif_action_settings_view_form" model="ir.actions.act_window">
+        <field name="name">Smif Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_id" ref="res_config_settings_view_form"/>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'smif'}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="smif_parent_menu" name="Saving and Credit" groups="base.group_user"/>
+
+        <menuitem id="smif_member_Menu" name="Members" parent="smif_parent_menu" sequence="1" groups="base.group_user"/>
+        <menuitem id="smif_member_menu" name="Members" parent="smif_member_Menu" action="smif_open_view_member" groups="base.group_user"/>
+
+
+        <menuitem id="smif_saving_menu" name="Saving" parent="smif_parent_menu" sequence="2" groups="base.group_user"/>
+        <menuitem id="smif_deposit_transaction_menu" name="Members Deposit" sequence="1"  parent="smif_saving_menu" action="smif_open_view_deposit_tran" groups="base.group_user"/>
+        <menuitem id="smif_withdrawal_transaction_menu" name="Members Withdrawal" sequence="2" parent="smif_saving_menu" action="smif_open_view_withdrawal_tran" groups="base.group_user"/>
+        <menuitem id="smif_interest_menu" name="Account Interest" sequence="3" parent="smif_saving_menu" action="smif_open_interest_form" groups="base.group_user"/>
+
+        <menuitem id="smif_payroll_import_menu" name="Payroll Import" sequence="4" parent="smif_saving_menu" action="smif_open_view_excel_payment_import_form" groups="base.group_user"/>
+        <menuitem id="smif_payroll_export_menu" name="Payroll Export" sequence="5" parent="smif_saving_menu" action="smif_open_view_excel_payment_export_form" groups="base.group_user"/>
+
+        <menuitem id="smif_loan_menu" name="Loan" parent="smif_parent_menu"  sequence="3" groups="base.group_user"/>
+        <menuitem id="smif_loan_request_menu" name="Loan Request" parent="smif_loan_menu" action="smif_open_view_loan_request" groups="base.group_user"/>
+<!--        <menuitem id="smif_loan_request_payment" name="Loan Payments" parent="smif_loan_menu" action="smif_open_view_loan_request" groups="base.group_user"/>-->
+
+        <menuitem id="smif_shares_menu" name="Shares" parent="smif_parent_menu"  sequence="4" groups="base.group_user"/>
+            <menuitem id="smif_dividend_menu" name="Member Dividend" parent="smif_shares_menu" action="smif_open_member_dividend_form" groups="base.group_user"/>
+
+
+        <menuitem id="smif_config_menu" name="Configuration" parent="smif_parent_menu"   sequence="5" groups="base.group_user"/>
+        <menuitem id="smif_settings_menu" name="Settings" parent="smif_config_menu" action="smif_action_settings_view_form" sequence="0" groups="base.group_user"/>
+        <menuitem id="smif_share_menu" name="Shares" parent="smif_config_menu" action="smif_open_view_share_setup" sequence="1" groups="base.group_user"/>
+        <menuitem id="smif_account_type_menu" name="Account Type" parent="smif_config_menu" action="smif_open_view_account_type_setup" sequence="2" groups="base.group_user"/>
+        <menuitem id="smif_loan_type_menu" name="Loan Type" parent="smif_config_menu" action="smif_open_view_loan_type_setup" sequence="3" groups="base.group_user"/>
+        <menuitem id="smif_pay_zone_menu" name="Pay Zones" parent="smif_config_menu" action="smif_open_view_pay_zone_setup" sequence="4" groups="base.group_user"/>
+        <menuitem id="smif_address_menu" name="Address Configuration" parent="smif_config_menu" action="smif_address_action_form" sequence="5" groups="base.group_user"/>
+    </data>
+</odoo>

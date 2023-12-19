@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="smif_share_setup_view_form" model="ir.ui.view">
+            <field name="name">smif.share_setup.form</field>
+            <field name="model">smif.shares</field>
+            <field name="arch" type="xml">
+                <form string="Shares" delete="false">
+                    <sheet>
+                        <group >
+                            <group>
+                                <field name="share_name"/>
+                                <field name="share_creation_date"/>
+                            </group>
+                            <group>
+                                <field name="totalInitialShareQuantity"/>
+                                <field name="unitPrice"/>
+                                <field name="company_id" invisible="True" options="{'no_create': True}"/>
+                                <field name="remainingQuantity" readonly="True" style="font-weight:bold;"/>
+                            </group>
+                        </group>
+
+                        <notebook>
+                            <page string="Accounting">
+                                <group>
+                                    <field name="default_account_id"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+
+                </form>
+            </field>
+        </record>
+        <record id="smif_share_setup_view_tree" model="ir.ui.view">
+            <field name="name">smif.share_setup.form</field>
+            <field name="model">smif.shares</field>
+            <field name="arch" type="xml">
+                <tree string="Shares" delete="false">
+                    <field name="share_name"/>
+                    <field name="totalInitialShareQuantity"/>
+                    <field name="unitPrice"/>
+                    <field name="remainingQuantity"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="smif_open_view_share_setup" model="ir.actions.act_window">
+            <field name="name">Shares</field>
+            <field name="res_model">smif.shares</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Add a new Share.
+                </p>
+                <p>
+                    All created shares will be displayed here. Please create your first share.
+                </p>
+            </field>
+        </record>
+        <record id="smif_member_share_view_form" model="ir.ui.view">
+            <field name="name">smif.member_share.form</field>
+            <field name="model">smif.member_shares</field>
+            <field name="arch" type="xml">
+                <form string="Member Share">
+
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
